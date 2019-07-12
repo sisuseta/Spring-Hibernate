@@ -19,7 +19,7 @@
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <spring.batch.version>3.0.8.RELEASE</spring.batch.version>
+    <spring.batch.version>3.0.10</spring.batch.version>
   </properties>
 
   <dependencies>
