@@ -1,0 +1,38 @@
+[
+{
+"id":1,
+"title":"Shiva Jayenthi",
+"subTitle":"Jayanthi of Shiv Baba",
+"startDate":"23-02-2017",
+"endDate":"25-02-2017",
+"type":"BK",
+"active":true
+},
+{
+"id":2,
+"title":"Avyaktha Day",
+"subTitle":"Nirakari, Nir vikari, Nir Agangari",
+"startDate":"17-01-2017",
+"endDate":"18-01-2017",
+"type":"BK",
+"active":true
+},
+{
+"id":3,
+"title":"Seva",
+"subTitle":"sevathari",
+"startDate":"17-01-2017",
+"endDate":"18-01-2017",
+"type":"BK",
+"active":true
+},
+{
+"id":3,
+"title":"Public Program",
+"subTitle":"Public Program",
+"startDate":"17-01-2017",
+"endDate":"18-01-2017",
+"type":"PUBLIC",
+"active":true
+}
+]

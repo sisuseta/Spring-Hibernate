@@ -1,0 +1,21 @@
+<xs:schema xmlns:xs = "http://www.w3.org/2001/XMLSchema"
+   xmlns:tns = "http://localsetup.com/tsw/schemas"
+   elementFormDefault = "qualified"
+   targetNamespace = "http://localsetup.com/tsw/schemas">
+<xs:element name="testSoapServiceRequest">
+<xs:complexType>
+ <xs:sequence>
+         <xs:element name = "referenceNo" type = "xs:string"/>
+         <xs:element name = "userName" type = "xs:string"/>
+      </xs:sequence>
+</xs:complexType>
+</xs:element>
+ <xs:element name = "testSoapServiceResponse">
+      <xs:complexType>
+         <xs:sequence>
+         <xs:element name = "Result" type = "xs:string"/>
+      </xs:sequence>
+      </xs:complexType>
+   </xs:element>
+
+</xs:schema>

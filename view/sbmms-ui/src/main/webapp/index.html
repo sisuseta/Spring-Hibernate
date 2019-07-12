@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="Utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta name="Keywords" content="Brahmakumaris,malaysia,register,event,soul,supreme soul,god,meditation,yoga,raja yoga,stress,peace,happiness,brahmakumaris,relax,karma,angar">
+		<title>BK Events</title>
+		<!--[if lt IE 8]>
+		 <div style=' clear: both; text-align:center; position: relative;'>
+		   <a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode">
+			 <img src="http://storage.ie6countdown.com/assets/100/images/banners/warning_bar_0000_us.jpg" border="0" height="42" width="820" alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today." />
+		   </a>
+		</div>
+		<![endif]-->
+		<!--[if lt IE 9]>
+		<script src="js/html5shiv.js"></script>
+		<link rel="stylesheet" media="screen" href="css/ie.css">
+		<![endif]-->
+		<LINK REL="SHORTCUT ICON"  HREF="images/favicon.ico">
+	</head>
+	<body  ng-app="pageApp" ng-controller="mainController" >
+		<header ng-cloak class="w3-margin-bottom">
+				<!-- Web page Menu-->
+				<div class="w3-topnav w3-red w3-padding-0">
+					<div>
+						<div class="w3-col s3 w3-left w3-padding-small">
+							<a href="javascript:void(0);" title="BK Events">
+							<img id="logo" class="logo-img" src="images/bk-logo-white.png" alt="BK Events" />				
+							</a>
+						</div>
+						<!-- Language Menu-->
+						<div class="w3-col s9 w3-right">
+							<ul class="w3-navbar w3-none w3-hover-yellow w3-right" >
+								<li ng-repeat="menu in menus.webmenu.right" class="w3-border-red">
+								<a ng-if="menu.childs.length > 0" class="w3-padding-hor-16 w3-text-white" parent  href="javascript:void(0);" ref="about_small_{{menu.name}}" ><i ng-if="menu.icon != null" class="fa {{menu.icon}}"></i>  {{menu.name}} <i  class="fa fa-caret-down"></i></a>
+								<a ng-if="menu.childs.length == 0" class="w3-padding-hor-16 w3-text-white" leaf  href="#{{menu.url}}" ><i ng-if="menu.icon != null" class="fa {{menu.icon}}"></i> {{menu.name}}</a>
+										<div ng-if="menu.childs" id="about_small_{{menu.name}}" class="w3-dropdown-content w3-white w3-card-4 " >
+											<a class="theme_hover" ng-repeat="submenu in menu.childs" href="#{{submenu.url}}">{{submenu.name}}</a>
+										</div>
+								</li>
+							</ul>
+						</div>				
+					 </div>
+					 <!-- Menu for mobile
+					 <div lang="{{lang.code}}" id="hided_menu" class="w3-right w3-row menu_back w3-border-bottom w3-border-blue w3-hide w3-hide-large w3-hide-medium" style="max-height:500px;overflow-y:scroll;">
+						<div  class="w3-full" >
+						  <ul class="w3-navbar w3-left-align w3-large theme w3-card-4">
+							<li><a class="w3-right" ref="hided_menu" href="javascript:void(0);" close>&times;</a></li>							
+								<li ng-repeat="menu in menus.webmenu.left">
+								<a ng-if="menu.childs.length > 0" class="w3-padding-hor-16 w3-text-white theme_hover" parent   ref="about_small_{{menu.name}}" ><i ng-if="menu.icon != null" class="fa {{menu.icon}}"></i>  {{menu.name}} <i  class="fa fa-caret-down"></i></a>
+								<a ng-if="menu.childs.length == 0" class="w3-padding-hor-16 w3-text-white theme_hover " leaf  href="#{{menu.url}}" ><i ng-if="menu.icon != null" class="fa {{menu.icon}}"></i> {{menu.name}}</a>
+										<div ng-if="menu.childs" id="about_small_{{menu.name}}" class="w3-dropdown-content w3-white w3-card-4 " >
+											<a class="theme_hover" href="#{{submenu.url}}" ng-repeat="submenu in menu.childs">{{submenu.name}}</a>
+										</div>
+								</li>	
+
+						  </ul>
+						</div>
+					</div>
+					
+					<div lang="{{lang.code}}" class="w3-row menu_back w3-hide-small">
+					Left Menu 
+						<ul class="w3-col w3-full w3-navbar  w3-large w3-transparent w3-none w3-left">
+							<li ng-repeat="menu in menus.webmenu.left">
+							<a id="{{menu.name}}" ng-if="menu.childs.length > 0" class="w3-padding-hor-16 w3-text-white theme_hover mainmenu" parent   ref="about_{{menu.name}}" ><i ng-if="menu.icon != null" class="fa {{menu.icon}}"></i>  {{menu.name}} <i  class="fa fa-caret-down"></i></a>
+							<a id="{{menu.name}}" ng-if="menu.childs.length == 0" class="w3-padding-hor-16 w3-text-white theme_hover mainmenu" leaf  href="#{{menu.url}}" ><i ng-if="menu.icon != null" class="fa {{menu.icon}}"></i> {{menu.name}}</a>
+									<div ng-if="menu.childs" id="about_{{menu.name}}" class="dropdown_menu w3-dropdown-content w3-white w3-card-4 " >
+										<a class="theme_hover" href="#{{submenu.url}}" ng-repeat="submenu in menu.childs">{{submenu.name}}</a>
+									</div>
+							</li>	
+						</ul>
+					</div> -->
+					
+				</div>
+		</header>
+	<!--<div class="w3-row" ng-include="currentPage">-->
+	<div ng-view ng-cloak removemenu style="min-height:400px;"></div>
+	
+	<div  id="popupBox" class="w3-modal">
+		<div class="w3-modal-content">
+			<header class="w3-container w3-blue"> 
+			  <span onclick="document.getElementById('popupBox').style.display='none'" 
+			  class="w3-closebtn">&times;</span>
+			  <h2>Confirmation</h2>
+			</header>
+			<div class="w3-container">
+				  <p>Are sure want to delete?</p>
+				  <p style="float: right;"><button class="w3-btn w3-red" onclick="document.getElementById('popupBox').style.display='none'">Delete</button><button class="w3-btn w3-greeb" onclick="document.getElementById('popupBox').style.display='none'">Cancel</button></p>
+			</div>
+		</div>
+	</div>
+	
+
+	<div id="imageBox" class="w3-modal" onclick="this.style.display='none'">
+	  <span class="w3-closebtn w3-hover-red w3-container w3-padding-16 w3-display-topright">&times;</span>
+	  <div class="w3-modal-content w3-animate-zoom">
+		<img id="imageBoxImage" src="img_fjords.jpg" class="w3-border theme_border" style="width:100%">
+	  </div>
+	</div>
+
+	<footer class="w3-red footer" >
+		<!--<p class="w3-display-bottomleft">&copy; 2016 Brahmakumaris. All rights reserved.</p>
+		<p class="w3-right" style="font-size:12px"> No.10, Lorong Maarof,<br/>59000 Bangsar Park,<br/>Tel:03-22826396 03-22822310,<br/>Fax :  03-22834070 </p>-->
+	</footer>		  
+	
+	<link rel="stylesheet" type="text/css" href='css/w3css.css' />
+	<link rel="stylesheet" type="text/css" href='css/custom.css' />
+	<link rel="stylesheet" type="text/css" href='css/font-awesome.min.css' />
+	<link rel="stylesheet" type="text/css" href="css/jquery.datetimepicker.css"/>
+	<style type="text/css">
+		[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+		  display: none !important;
+		}
+	</style>
+	<script src="js/jquery-2.2.3.min.js"></script>
+	<script src="js/angular.min.1.4.8.js"></script>
+	<script src="js/angular-route.min.1.4.8.js"></script>
+	<script src="js/messageResource.js"></script>
+	<script src="js/jquery.datetimepicker.full.min.js"></script>
+	<script src="js/app.js"></script>
+	<script src="js/page.js"></script>
+	<script src="js/datafactory.js"></script>
+
+	
+	</body>
+</html>

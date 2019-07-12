@@ -1,0 +1,50 @@
+<wsdl:definitions xmlns:sch="http://localsetup.com/tsw/schemas" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://localsetup.com/tsw/definitions" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" targetNamespace="http://localsetup.com/tsw/definitions">
+<wsdl:types>
+<xs:schema xmlns:tns="http://localsetup.com/tsw/schemas" xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" targetNamespace="http://localsetup.com/tsw/schemas">
+<xs:element name="testSoapServiceRequest">
+<xs:complexType>
+<xs:sequence>
+<xs:element name="referenceNo" type="xs:string"/>
+<xs:element name="userName" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+</xs:element>
+<xs:element name="testSoapServiceResponse">
+<xs:complexType>
+<xs:sequence>
+<xs:element name="Result" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+</xs:element>
+</xs:schema>
+</wsdl:types>
+<wsdl:message name="testSoapServiceRequest">
+<wsdl:part element="sch:testSoapServiceRequest" name="testSoapServiceRequest"> </wsdl:part>
+</wsdl:message>
+<wsdl:message name="testSoapServiceResponse">
+<wsdl:part element="sch:testSoapServiceResponse" name="testSoapServiceResponse"> </wsdl:part>
+</wsdl:message>
+<wsdl:portType name="TestSoapPort">
+<wsdl:operation name="testSoapService">
+<wsdl:input message="tns:testSoapServiceRequest" name="testSoapServiceRequest"> </wsdl:input>
+<wsdl:output message="tns:testSoapServiceResponse" name="testSoapServiceResponse"> </wsdl:output>
+</wsdl:operation>
+</wsdl:portType>
+<wsdl:binding name="TestSoapPortSoap11" type="tns:TestSoapPort">
+<soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+<wsdl:operation name="testSoapService">
+<soap:operation soapAction=""/>
+<wsdl:input name="testSoapServiceRequest">
+<soap:body use="literal"/>
+</wsdl:input>
+<wsdl:output name="testSoapServiceResponse">
+<soap:body use="literal"/>
+</wsdl:output>
+</wsdl:operation>
+</wsdl:binding>
+<wsdl:service name="TestSoapPortService">
+<wsdl:port binding="tns:TestSoapPortSoap11" name="TestSoapPortSoap11">
+<soap:address location="http://localhost:8080/soap-spring/getTestResults/"/>
+</wsdl:port>
+</wsdl:service>
+</wsdl:definitions>
