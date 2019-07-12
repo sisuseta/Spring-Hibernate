@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/batch
+						http://www.springframework.org/schema/batch/spring-batch-3.0.xsd
+						http://www.springframework.org/schema/beans
+						http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+                
+	<bean id="testObj" class="com.sbmms.batch.dac.model.TestObject" scope="step" />
+         <bean id="testDataMapper" class="com.sbmms.batch.sample.TestDataMapper" scope="step" />
+         
+        <job id="testObjJob" xmlns="http://www.springframework.org/schema/batch">
+              <step id="testInitiator">
+                  <tasklet ref="testInitiatorTasklet"></tasklet>
+                     <next on="COMPLETED" to="loadTestData" />
+                     <next on="FAILED" to="loadError" />
+
+              </step>
+              
+            <step id="loadTestData">
+              <tasklet>
+                    <chunk reader="testFileItemReader" writer="testItemWriter"  commit-interval="500" skip-limit="1000000">
+               		<streams>
+                            <stream ref="testFileItemReader" />
+                            <stream ref="skippedRecordsItemWriter" />
+          		</streams>
+                        <skippable-exception-classes>
+                            <include class="org.springframework.dao.DuplicateKeyException"/>
+                            <include class="java.sql.SQLIntegrityConstraintViolationException"/>
+			</skippable-exception-classes>
+        		<!-- <listeners>
+                            <listener ref="skipLogListener" />	               
+                        </listeners> -->
+                    </chunk>  
+                    <transaction-attributes isolation="READ_COMMITTED" />
+              </tasklet>
+               <next on="*" to="loadError" />
+               <next on="COMPLETED" to="loadSuccess" />
+            </step>
+            
+             <step id="loadError">
+                  <tasklet ref="testErrorTasklet"></tasklet>
+              </step>
+              
+              
+               <step id="loadSuccess">
+                  <tasklet ref="testSuccessTasklet"></tasklet>
+                </step>
+            
+        </job>
+        
+
+        <bean id="testInitiatorTasklet" class="com.sbmms.batch.sample.BatchJobInitiator" scope="step" />
+       <bean id="testSuccessTasklet" class="com.sbmms.batch.sample.BatchJobSuccess" scope="step" />
+       <bean id="testErrorTasklet" class="com.sbmms.batch.sample.BatchJobError" scope="step" />
+        	<bean id="testFileItemReader" class="com.sbmms.batch.sample.CustomFileItemReader" scope="step">
+		<!-- Read a csv file -->
+                    <property name="resource" value="test.csv" />
+			<property name="lineMapper">
+			<bean class="org.springframework.batch.item.file.mapping.DefaultLineMapper">
+				<property name="lineTokenizer">
+					<bean class="org.springframework.batch.item.file.transform.DelimitedLineTokenizer">
+						<property name="delimiter" value="^"/>
+						<property name="names" value="id,title,subTitle,description,type,place" />
+					</bean>
+				</property>
+				<property name="fieldSetMapper" ref="testDataMapper" />
+                                <!-- <property name="fieldSetMapper">
+                                    <bean class="org.springframework.batch.item.file.mapping.BeanWrapperFieldSetMapper">
+                                    <property name="prototypeBeanName" value="testObj" />
+                                    </bean>
+                                 </property> -->
+				
+			</bean>
+		</property>
+	</bean>  
+  
+          <bean id="testItemWriter"
+                class="org.springframework.batch.item.database.JdbcBatchItemWriter">
+                <property name="dataSource" ref="dataSource" />
+                <property name="sql">
+                  <value>
+                    <![CDATA[
+                        insert into TEST_OBJ(ID,TITLE,SUBTITLE,DESCRIPTION,TYPE,PLACE)
+                                values (:id,:title,:subTitle,:description,:type,:place)
+                    ]]>
+                  </value>
+                </property>
+                <!-- It will take care matching between object property and sql name parameter -->
+                <property name="itemSqlParameterSourceProvider">
+                        <bean class="org.springframework.batch.item.database.BeanPropertyItemSqlParameterSourceProvider" />
+                </property>
+          </bean>
+          
+        <!-- <bean id="skipLogListener" class="com.sbi.schedule.springbatch.listener.SkipRecordsLogListener" scope="step">
+            <property name="skippedRecordsItemWriter" ref="skippedRecordsItemWriter" />
+        </bean> -->
+        
+        <bean id="skippedRecordsItemWriter"     class="org.springframework.batch.item.file.FlatFileItemWriter">
+        <property name="lineAggregator">
+			<bean class="org.springframework.batch.item.file.transform.DelimitedLineAggregator">
+				<property name="delimiter" value="^"/>
+				<property name="fieldExtractor">
+					<bean class="org.springframework.batch.item.file.transform.BeanWrapperFieldExtractor">
+                                            <property name="names" value="id,title,subTitle,description,type,place" />
+					</bean>
+				</property>
+			</bean>
+		</property>
+ 	</bean>
+        
+        
+        
+        <job id="reportJob" xmlns="http://www.springframework.org/schema/batch">
+	<step id="step1">
+	  <tasklet>
+		<chunk reader="cvsFileItemReader" writer="mysqlItemWriter"
+			commit-interval="2">
+		</chunk>
+	  </tasklet>
+	</step>
+  </job>
+
+  <bean id="cvsFileItemReader" class="org.springframework.batch.item.file.FlatFileItemReader" scope="step">
+
+	<!-- Read a csv file -->
+	<property name="resource" value="classpath:csv/test.csv" />
+
+	<property name="lineMapper">
+		<bean class="org.springframework.batch.item.file.mapping.DefaultLineMapper">
+		  <!-- split it -->
+		  <property name="lineTokenizer">
+		        <bean
+			  class="org.springframework.batch.item.file.transform.DelimitedLineTokenizer">
+                              <property name="delimiter" value="^"/>
+				<property name="names" value="id,title,subTitle,description,type,place" />
+			</bean>
+		  </property>
+		 <property name="fieldSetMapper">
+                                    <bean class="org.springframework.batch.item.file.mapping.BeanWrapperFieldSetMapper">
+                                    <property name="prototypeBeanName" value="testObj" />
+                                    </bean>
+                                 </property>
+
+		  </bean>
+	  </property>
+
+  </bean>
+
+  <bean id="mysqlItemWriter"
+	class="org.springframework.batch.item.database.JdbcBatchItemWriter" scope="step">
+	<property name="dataSource" ref="dataSource" />
+	<property name="sql">
+	  <value>
+            <![CDATA[
+                        insert into TEST_OBJ(ID,TITLE,SUBTITLE,DESCRIPTION,TYPE,PLACE)
+                                values (:id,:title,:subTitle,:description,:type,:place)
+            ]]>
+	  </value>
+	</property>
+	<!-- It will take care matching between object property and sql name parameter -->
+	<property name="itemSqlParameterSourceProvider">
+		<bean
+		class="org.springframework.batch.item.database.BeanPropertyItemSqlParameterSourceProvider" />
+	</property>
+  </bean>
+ 
+</beans>
